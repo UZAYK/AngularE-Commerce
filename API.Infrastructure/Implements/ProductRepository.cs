@@ -1,23 +1,38 @@
 ﻿using API.Core.DbModels;
 using API.Core.Interfaces;
+using API.Infrastructure.DataContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace API.Infrastructure.Implements
 {
     public class ProductRepository : IProductRepository
     {
-
-        public Task<IReadOnlyList<Product>> GetProductAsync()
+        private readonly StoreContext _ctx;
+        public ProductRepository(StoreContext ctx)
         {
-            throw new NotImplementedException();
+            _ctx = ctx;
         }
 
-        public Task<Product> GetProductByIdAsync(int id)
+        /// <summary>
+        ///  Product Get ById (First)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _ctx.Products.FindAsync(id);
         }
+
+        /// <summary>
+        /// All Product List
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IReadOnlyList<Product>> GetProductAsync()
+        {
+            return await _ctx.Products.ToListAsync();
+        }
+
     }
 }
