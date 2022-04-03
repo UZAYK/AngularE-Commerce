@@ -10,28 +10,34 @@ namespace API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IGenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepository;
+        private readonly IGenericRepository<ProductType> _productTypeRepository;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(IGenericRepository<Product> productRepository,
+        IGenericRepository<ProductBrand> productBrandRepository,
+        IGenericRepository<ProductType> productTypeRepository)
         {
             _productRepository = productRepository;
+            _productBrandRepository = productBrandRepository;
+            _productTypeRepository = productTypeRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
-        => Ok(await _productRepository.GetProductAsync());
+        => Ok(await _productRepository.ListAllAsync());
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProducts(int id) 
-        => await _productRepository.GetProductByIdAsync(id);
+        => await _productRepository.GetByIdAsync(id);
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands() 
-        => Ok(await _productRepository.GetProductBrandsAsync());
+        => Ok(await _productBrandRepository.ListAllAsync());
 
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductTypes() 
-        => Ok(await _productRepository.GetProductTypesAsync());
+        => Ok(await _productTypeRepository.ListAllAsync());
 
     }
 }
