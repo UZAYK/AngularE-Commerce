@@ -10,7 +10,17 @@ namespace API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "E-Commerve API", Version = "v1" });
+                c.SwaggerDoc("CoreSwagger", new OpenApiInfo
+                {
+                    Title = "E-Commerve API",
+                    Version = "1.0.0",
+                    Description = "Test",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Swagger implemantation Uzay KAHRAMAN",
+                        Email = "uzaytest@gmail.com"
+                    },
+                });
             });
             return services;
         }
@@ -20,7 +30,7 @@ namespace API.Extensions
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/w1/swagger.json", "E-Commerce API");
+                c.SwaggerEndpoint("/swagger/CoreSwagger/swagger.json", "E-Commerce API");
             });
             return app;
 
