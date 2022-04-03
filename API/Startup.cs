@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using API.Helpers;
 using API.Middleware;
 using Microsoft.OpenApi.Models;
+using API.Extensions;
 
 namespace API
 {
@@ -25,20 +26,17 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
             services.AddAutoMapper(typeof(MappingProfiles));
 
             services.AddControllers();
             services.AddDbContext<StoreContext>(opt =>
-            opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddApplicationServices();
+            services.AddSwaggerDocumention();
 
             services.AddHttpContextAccessor();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "E-Commerve API", Version = "v1" });
-            });
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,11 +56,7 @@ namespace API
 
             app.UseAuthorization();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/w1/swagger.json", "E-Commerce API");
-            });
+            app.UseSwaggerDocumention();
 
             app.UseEndpoints(endpoints =>
             {
