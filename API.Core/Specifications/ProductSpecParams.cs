@@ -20,5 +20,19 @@ namespace API.Core.Specifications
         public int? TypeId { get; set; }
         public string Sort { get; set; }
 
+
+        /// <summary>
+        /// Encapsulation
+        /// </summary>
+        private string _search;
+        public string Search
+        {
+            get { return _search; }
+
+            //value "_search"ten gelen değerdir.
+            set { _search = value.ToLower(); }
+        }
+
+
     }
 }

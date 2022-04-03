@@ -11,9 +11,6 @@ namespace API.Core.Specifications
         (!productSpecParams.BrandId.HasValue || x.ProdutBrandId == productSpecParams.BrandId)
         &&
         (!productSpecParams.TypeId.HasValue || x.ProdutBrandId == productSpecParams.TypeId))
-        {
-
-
-        }
+        {  }
     }
 }
