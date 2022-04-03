@@ -1,8 +1,10 @@
 ﻿using API.Core.DbModels;
 using API.Core.Interfaces;
 using API.Core.Specifications;
+using API.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -25,17 +27,36 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts()
         {
             var spec = new ProductWithProductTypeAndBrandsSpecification();
-            return Ok(await _productRepository.ListAsync(spec));
+            var data = await _productRepository.ListAsync(spec);
+            return data.Select(product => new ProductToReturnDto{
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                PictureUrl = product.PictureUrl,
+                Price = product.Price,
+                ProdutBrand = product.ProdutBrand != null ? product.ProdutBrand.Name : string.Empty,
+                ProdutType = product.ProdutType != null ? product.ProdutType.Name : string.Empty
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProducts(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProducts(int id)
         {
             var spec = new ProductWithProductTypeAndBrandsSpecification(id);
-            return Ok(await _productRepository.GetEntityWithSpec(spec));
+            var product = await _productRepository.GetEntityWithSpec(spec);
+            return new ProductToReturnDto
+            {
+            Id = product.Id,
+            Name = product.Name,
+            Description = product.Description,
+            PictureUrl = product.PictureUrl,
+            Price = product.Price,
+            ProdutBrand = product.ProdutBrand!= null? product.ProdutBrand.Name : string.Empty,
+            ProdutType = product.ProdutType != null ? product.ProdutType.Name : string.Empty
+            };
         }
 
         [HttpGet("brands")]
