@@ -17,7 +17,6 @@ namespace API.Infrastructure.Implements
         public GenericRepository(StoreContext ctx)
         => _ctx = ctx;
 
-
         public async Task<T> GetByIdAsync(int id)
         => await _ctx.Set<T>().FindAsync(id);
 

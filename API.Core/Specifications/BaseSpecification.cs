@@ -6,22 +6,28 @@ namespace API.Core.Specifications
 {
     public class BaseSpecification<T> : ISpecifications<T>
     {
-        public BaseSpecification()
-        {
+        public BaseSpecification() { }
 
-        }
         public BaseSpecification(Expression<Func<T, bool>> criteria)
-        {
-            Criteria = criteria;
-        }
+        => Criteria = criteria;
+
         public Expression<Func<T, bool>> Criteria { get; }
 
-        public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
+        public List<Expression<Func<T, object>>> Includes { get; } 
+        = new List<Expression<Func<T, object>>>();
+
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
         //protected = bu ve mirascı sınıflarda kullanılabilir anlamındadır.
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
-        {
-            Includes.Add(includeExpression);
-        }
+        => Includes.Add(includeExpression);
+
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        => OrderBy = orderByExpression;
+
+        protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
+        => OrderByDescending = orderByDescExpression;
     }
 }
