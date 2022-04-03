@@ -13,7 +13,7 @@ namespace API.Core.Specifications
 
         public Expression<Func<T, bool>> Criteria { get; }
 
-        public List<Expression<Func<T, object>>> Includes { get; } 
+        public List<Expression<Func<T, object>>> Includes { get; }
         = new List<Expression<Func<T, object>>>();
 
         public Expression<Func<T, object>> OrderBy { get; private set; }
@@ -29,5 +29,16 @@ namespace API.Core.Specifications
 
         protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
         => OrderByDescending = orderByDescExpression;
+
+
+        public int Take { get; private set; }
+        public int Skip { get; private set; }
+        public bool IsPagingEnabled { get; private set; }
+        protected void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            IsPagingEnabled = true;
+        }
     }
 }

@@ -4,16 +4,25 @@ namespace API.Core.Specifications
 {
     public class ProductWithProductTypeAndBrandsSpecification : BaseSpecification<Product>
     {
-        public ProductWithProductTypeAndBrandsSpecification(string sort)
+        public ProductWithProductTypeAndBrandsSpecification(ProductSpecParams productSpecParams)
+        : base(x =>
+        (!productSpecParams.BrandId.HasValue || x.ProdutBrandId == productSpecParams.BrandId)
+        &&
+        ///HasValue = "var ise"
+        (!productSpecParams.TypeId.HasValue || x.ProdutBrandId == productSpecParams.TypeId))
         {
             AddInclude(x => x.ProdutBrand);
             AddInclude(x => x.ProdutType);
             AddOrderBy(x => x.Name);
 
+            //önce gelen sayfanın örn:2, bir eksisini alarak(geçilen sayfasının saptanması için), onu listenen 
+            //sayfa botuyu(listenilen kayır sayısı örn: 2) ile çarpar(geçeceği kayıt sayısı), en son ki ibare de alacağı sayfa sayısı
+            ApplyPaging(productSpecParams.PageSize * (productSpecParams.PageIndex - 1), productSpecParams.PageSize);
+
             ///bir değer girilmiş ise ve bu değer mantıklı bir şey ise;
-            if (!string.IsNullOrWhiteSpace(sort))
+            if (!string.IsNullOrWhiteSpace(productSpecParams.Sort))
             {
-                switch (sort)
+                switch (productSpecParams.Sort)
                 {
                     case "priceAsc":
                         AddOrderBy(p => p.Price);

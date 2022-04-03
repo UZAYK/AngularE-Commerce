@@ -28,9 +28,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts(string sort)
+        ///FromQuery - urlden çekmesi için
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productSpecParams)
         {
-            var spec = new ProductWithProductTypeAndBrandsSpecification(sort);
+            var spec = new ProductWithProductTypeAndBrandsSpecification(productSpecParams);
             var product = await _productRepository.ListAsync(spec);
             return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(product));
         }
